@@ -1,4 +1,5 @@
 #include <GL/glut.h>
+#include "constants.h"
 
 void init() {
     glClearColor(0.0, 0.0, 0.0, 1.0);
