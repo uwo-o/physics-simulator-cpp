@@ -9,7 +9,7 @@ file(GLOB src_folder
     "src/*.cpp"
 )
 
-include_directories(includes)
+include_directories(include)
 add_executable(physim ${src_folder})
 
 target_link_libraries(physim ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES})
