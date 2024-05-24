@@ -1,2 +1,4 @@
 sudo apt-get update
-sudo apt-get install freeglut3-dev libglew-dev -y
+sudo apt install libwayland-dev libxkbcommon-dev xorg-dev
+
+sudo apt-get install libglfw3-dev
