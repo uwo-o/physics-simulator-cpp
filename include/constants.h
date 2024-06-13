@@ -1,6 +1,10 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
-#define GRAVITY_ACC 9.81
+static const float GRAVITY = 0.1;
+static const int WINDOW_WIDTH = 800;
+static const int WINDOW_HEIGHT = 600;
+static const float AIR_RESISTANCE = 0.99;
+static const float FRICTION = 0.97;
 
 #endif

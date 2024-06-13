@@ -12,8 +12,10 @@ public:
     sf::Vector2f velocity;
     sf::Vector2f acceleration;
 
+    float radius;
+
     void update();
-    bool isCollidingWithWindow(int windowWidth, int windowHeight);
+    void checkCollitionWithWindows(int windowWidth, int windowHeight);
 };
 
 #endif
