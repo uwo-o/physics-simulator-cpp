@@ -10,3 +10,4 @@ sudo apt install \
     libegl1-mesa-dev \
     libdrm-dev \
     libgbm-dev
+sudo apt install libsfml-dev
