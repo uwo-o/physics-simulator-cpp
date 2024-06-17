@@ -2,6 +2,9 @@
 #define PARTICLE_H
 
 #include <SFML/Graphics.hpp>
+#include <math.h>
+
+#include "constants.h"
 
 class Particle{
 public:
@@ -13,9 +16,12 @@ public:
     sf::Vector2f acceleration;
 
     float radius;
+    float mass;
 
     void update();
-    void checkCollitionWithWindows(int windowWidth, int windowHeight);
+    void checkCollitionWithWindows();
+    void checkCollitionWithParticle(Particle &p);
+    void unOverlap(Particle &p);
 };
 
 #endif
