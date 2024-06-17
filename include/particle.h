@@ -5,6 +5,7 @@
 #include <math.h>
 
 #include "constants.h"
+#include "vector_op.h"
 
 class Particle{
 public:
@@ -14,6 +15,7 @@ public:
     sf::Vector2f position;
     sf::Vector2f velocity;
     sf::Vector2f acceleration;
+    sf::Vector2f momentum;
 
     float radius;
     float mass;
@@ -21,7 +23,6 @@ public:
     void update();
     void checkCollitionWithWindows();
     void checkCollitionWithParticle(Particle &p);
-    void unOverlap(Particle &p);
 };
 
 #endif

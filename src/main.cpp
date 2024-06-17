@@ -5,17 +5,16 @@
 #include "particle.h"
 
 std::list<Particle> particles;
+const int MAX_PARTICLES = 50;
 
 int main(int argc, char** argv) {
 
-    Particle p(sf::Vector2f(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2), 20.0f, sf::Color::Red);
-    p.velocity = sf::Vector2f(5,5);
-    particles.push_back(p);
-    Particle p2(sf::Vector2f((WINDOW_WIDTH / 2), WINDOW_HEIGHT / 2), 10.0f, sf::Color::Blue);
-    p2.velocity = sf::Vector2f(-5,-5);
-    particles.push_back(p2);
-    Particle p3(sf::Vector2f((WINDOW_WIDTH / 2), WINDOW_HEIGHT / 2), 10.0f, sf::Color::Green);
-    particles.push_back(p3);
+    for (int i=0; i<MAX_PARTICLES; i++) {
+        Particle p(sf::Vector2f(0, WINDOW_HEIGHT/2), (float) (rand() % 5 + 2), sf::Color::White);
+        p.velocity = sf::Vector2f(rand() % 10 + 1, rand() % 10 + 1);
+        p.position = sf::Vector2f(rand() % WINDOW_WIDTH, rand() % WINDOW_HEIGHT);
+        particles.push_back(p);
+    }
 
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Physim");
     window.setFramerateLimit(60);
@@ -32,10 +31,8 @@ int main(int argc, char** argv) {
 
         for (auto it = particles.begin(); it != particles.end(); it++) {
 
-            for (auto it2 = particles.begin(); it2 != particles.end(); it2++) {
-                if (it != it2) it->checkCollitionWithParticle(*it2);
-            }
-
+            for(auto it2 = particles.begin(); it2 != particles.end(); it2++)
+                if(it!=it2) it->checkCollitionWithParticle(*it2);
             it->update();
             window.draw(it->circle);
         }

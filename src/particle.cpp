@@ -1,5 +1,4 @@
 #include "particle.h"
-#include <iostream>
 
 Particle::Particle(sf::Vector2f position, float radius, sf::Color color) {
     this->position = position;
@@ -9,6 +8,7 @@ Particle::Particle(sf::Vector2f position, float radius, sf::Color color) {
     this->mass = radius * radius * M_PI;
 
     this->circle = sf::CircleShape(radius);
+    this->circle.setOrigin(radius, radius);
     this->circle.setFillColor(color);
     this->circle.setPosition(position);
 }
@@ -40,28 +40,28 @@ void Particle::checkCollitionWithWindows() {
 }
 
 void Particle::checkCollitionWithParticle(Particle &p) {
-    float distance = sqrt(pow(this->position.x - p.position.x, 2) + pow(this->position.y - p.position.y, 2));
-    if (distance > p.radius + this->radius) return;
-    this->velocity.x *= -1;
-    this->velocity.y *= -1;
-    p.velocity.x *= -1;
-    p.velocity.y *= -1;
-}
-
-void Particle::unOverlap(Particle &p) {
-    sf::Vector2f direction = p.position - this->position;
-    float distance = sqrt(pow(this->position.x - p.position.x, 2) + pow(this->position.y - p.position.y, 2));
-
+    float distance = sqrt(pow(p.position.x - this->position.x, 2) + pow(p.position.y - this->position.y, 2));
     if (distance > this->radius + p.radius) return;
 
-    std::cout << distance << std::endl;
+    sf::Vector2f normal = p.position - this->position;
+    float mag = magnitude(normal);
+    normal = normal / mag;
 
-    this->position.x = distance - this->radius;
-    this->position.y = distance - this->radius;
+    float v1_n = dot(this->velocity, normal);
+    float v2_n = dot(p.velocity, normal);
+
+    float v1_f = ((this->mass - p.mass)*v1_n + 2.0f * p.mass* v2_n)/(this->mass + p.mass);
+    float v2_f = ((p.mass - this->mass)*v2_n + 2.0f * this->mass * v1_n)/(this->mass + p.mass);
+
+    // Update the velocities of both particles
+    this->velocity += (v1_f - v1_n) * normal;
+    p.velocity += (v2_f - v2_n) * normal;
 }
 
 void Particle::update() {
+    this->velocity += this->acceleration;
     this->position += this->velocity;
+    this->momentum = this->velocity * this->mass;
     this->checkCollitionWithWindows();
     this->circle.setPosition(this->position);
 }
