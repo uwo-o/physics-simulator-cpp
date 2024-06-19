@@ -3,14 +3,15 @@
 
 #include "constants.h"
 #include "particle_manager.h"
+#include "wave_manager.h"
 
 int main(int argc, char** argv) {
 
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Physim");
     window.setFramerateLimit(FRAMES_PER_SECOND);
 
-    ParticleManager particleManager = ParticleManager(&window, false, false);
-    particleManager.generate_particles(50);
+    WaveManager waveManager = WaveManager(&window);
+    waveManager.generate_grid();
 
     while (window.isOpen()) {
 
@@ -20,7 +21,7 @@ int main(int argc, char** argv) {
         }
 
         window.clear(sf::Color::Black);
-        particleManager.update();
+        waveManager.update();
         window.display();
 
     }
