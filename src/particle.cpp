@@ -21,21 +21,25 @@ void Particle::checkCollitionWithWindows() {
 
     if (x >= WINDOW_WIDTH) {
         this->position.x = WINDOW_WIDTH - this->radius;
-        this->velocity.x *= -1*FRICTION;
+        this->velocity.x *= -1;
+        if(this->friction) this->velocity.x *= FRICTION;
     }
     else if (x <= 0) {
         this->position.x = this->radius;
-        this->velocity.x *= -1*FRICTION;
+        this->velocity.x *= -1;
+        if(this->friction) this->velocity.x *= FRICTION;
     }
 
     if (y >= WINDOW_HEIGHT) {
         this->position.y = WINDOW_HEIGHT - this->radius;
-        this->velocity.y *= -1*FRICTION;
-        this->velocity.x *= FRICTION;
+        this->velocity.y *= -1;
+        if(this->friction) this->velocity.y *= FRICTION;
+        if(this->friction) this->velocity.x *= FRICTION;
     }
     else if (y <= 0) {
         this->position.y = this->radius;
-        this->velocity.y *= -1*FRICTION;
+        this->velocity.y *= -1;
+        if(this->friction) this->velocity.y *= FRICTION;
     }
 }
 
@@ -64,4 +68,8 @@ void Particle::update() {
     this->momentum = this->velocity * this->mass;
     this->checkCollitionWithWindows();
     this->circle.setPosition(this->position);
+}
+
+void Particle::set_friction(bool state) {
+    this->friction = state;
 }

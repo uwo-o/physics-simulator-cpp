@@ -16,13 +16,16 @@ public:
     sf::Vector2f velocity;
     sf::Vector2f acceleration;
     sf::Vector2f momentum;
-
+    
     float radius;
     float mass;
+    bool friction = false;
 
     void update();
     void checkCollitionWithWindows();
     void checkCollitionWithParticle(Particle &p);
+
+    void set_friction(bool state);
 };
 
 #endif

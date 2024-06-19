@@ -1,7 +1,9 @@
 #include "particle_manager.h"
 
-ParticleManager::ParticleManager(sf::RenderWindow *window) {
+ParticleManager::ParticleManager(sf::RenderWindow *window, bool gravity, bool friction) {
     this->window = window;
+    this->gravity = gravity;
+    this->friction = friction;
 }
 void ParticleManager::generate_particles(int number) {
 
@@ -9,6 +11,8 @@ void ParticleManager::generate_particles(int number) {
         Particle p(sf::Vector2f(0, WINDOW_HEIGHT/2), (float) (rand() % 5 + 2), sf::Color::White);
         p.velocity = sf::Vector2f(rand() % 10 + 1, rand() % 10 + 1);
         p.position = sf::Vector2f(rand() % WINDOW_WIDTH, rand() % WINDOW_HEIGHT);
+        if (gravity) p.acceleration = sf::Vector2f(0, GRAVITY);
+        if (friction) p.friction = this->friction;
         this->particles.push_back(p);
     }
 

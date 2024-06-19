@@ -9,7 +9,7 @@ int main(int argc, char** argv) {
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Physim");
     window.setFramerateLimit(FRAMES_PER_SECOND);
 
-    ParticleManager particleManager = ParticleManager(&window);
+    ParticleManager particleManager = ParticleManager(&window, false, false);
     particleManager.generate_particles(50);
 
     while (window.isOpen()) {
