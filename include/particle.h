@@ -7,6 +7,8 @@
 #include "constants.h"
 #include "vector_op.h"
 
+#include <iostream>
+
 class Particle{
 public:
     Particle(sf::Vector2f position, float radius, sf::Color color);

@@ -44,6 +44,7 @@ void Particle::checkCollitionWithWindows() {
 }
 
 void Particle::checkCollitionWithParticle(Particle &p) {
+
     float distance = sqrt(pow(p.position.x - this->position.x, 2) + pow(p.position.y - this->position.y, 2));
     if (distance > this->radius + p.radius) return;
 

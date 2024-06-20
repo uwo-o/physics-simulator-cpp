@@ -16,18 +16,18 @@ void ParticleManager::grid_search() {
         }
     }
     
-    for(auto it = this->particles.begin(); it != this->particles.end(); it++) {
-        int x = it->position.x / MAX_RADIUS;
-        int y = it->position.y / MAX_RADIUS;
-        this->grid[x][y].push_back(*it);
-        it->update();
+    for(auto& it : this->particles) {
+        int x = it.position.x / MAX_RADIUS;
+        int y = it.position.y / MAX_RADIUS;
+        this->grid[x][y].push_back(it);
+        it.update();
     }
 }
 
 void ParticleManager::generate_particles(int number) {
     for (int i=0; i<number; i++) {
         Particle p(sf::Vector2f(0, WINDOW_HEIGHT/2), (float) MAX_RADIUS, sf::Color::White);
-        p.velocity = sf::Vector2f(rand() % 10 + 1, rand() % 10 + 1);
+        p.velocity = sf::Vector2f(10, 5);
         p.position = sf::Vector2f(0,0);
         if (gravity) p.acceleration = sf::Vector2f(0, GRAVITY);
         if (friction) p.friction = this->friction;
@@ -38,13 +38,16 @@ void ParticleManager::generate_particles(int number) {
 
 void ParticleManager::update() {
 
-    this->window->setTitle("Particles: " + std::to_string(this->particles.size()));
+    this->window->setTitle("Physim - " + std::to_string(this->particles.size()) + " particles");
 
     this->grid_search();
+
     for (int i=0; i<this->grid.size(); i++) {
         for (int j=0; j<this->grid[i].size(); j++) {
 
             auto cell = this->grid[i][j];
+
+            if (cell.size() == 0) continue;
 
             for (int dx = -1; dx<= 1; dx++) {
                 for (int dy = -1; dy<= 1; dy++) {
@@ -53,18 +56,25 @@ void ParticleManager::update() {
 
                     auto neighbour = this->grid[i+dx][j+dy];
                     
-                    for (auto it = cell.begin(); it != cell.end(); it++) {
-                        for (auto it2 = neighbour.begin(); it2 != neighbour.end(); it2++) {
-                            if (it != it2) {
-                                it->checkCollitionWithParticle(*it2);
-                                it->update();
-                            } 
+                    for (auto &it : cell) {
+                        for (auto &it2 : neighbour) {
+                            if (&it != &it2) {
+                                it.checkCollitionWithParticle(it2);
+                            }
                         }
-                        this->window->draw(it->circle);
+                        it.update();
                     }
                 }
-            
             }
         }
     }
+
+    for(auto& row: this->grid) {
+        for(auto& cell: row) {
+            for(auto& p: cell) {
+                this->window->draw(p.circle);
+            }
+        }
+    }
+
 }
