@@ -9,21 +9,21 @@ ParticleManager::ParticleManager(sf::RenderWindow *window, bool gravity, bool fr
 void ParticleManager::grid_search() {
     this->grid.clear();
     this->grid = std::vector<std::vector<std::vector<Particle>>>();
-    for (int i=0; i<WINDOW_WIDTH/MAX_RADIUS; i++) {
+    for (int i=0; i<WINDOW_WIDTH; i+=MAX_RADIUS) {
         this->grid.push_back(std::vector<std::vector<Particle>>());
-        for (int j=0; j<WINDOW_HEIGHT/MAX_RADIUS; j++) {
-            this->grid[i].push_back(std::vector<Particle>());
-            for (auto it = this->particles.begin(); it != this->particles.end(); it++) {
-                std::cout << it->position.x << " " << it->position.y << std::endl;
-                if (it->position.x >= i*MAX_RADIUS && it->position.x < (i+1)*MAX_RADIUS && it->position.y >= j*MAX_RADIUS && it->position.y < (j+1)*MAX_RADIUS) {
-                    this->grid[i][j].push_back(*it);
-                }
-                it->update();
-                this->window->draw(it->circle);
-            }    
+        for (int j=0; j<WINDOW_HEIGHT; j+=MAX_RADIUS) {
+            this->grid[i/MAX_RADIUS].push_back(std::vector<Particle>());
         }
     }
+    
+    for(auto it = this->particles.begin(); it != this->particles.end(); it++) {
+        int x = it->position.x / MAX_RADIUS;
+        int y = it->position.y / MAX_RADIUS;
+        this->grid[x][y].push_back(*it);
+        it->update();
+    }
 }
+
 void ParticleManager::generate_particles(int number) {
     for (int i=0; i<number; i++) {
         Particle p(sf::Vector2f(0, WINDOW_HEIGHT/2), (float) MAX_RADIUS, sf::Color::White);
@@ -37,23 +37,34 @@ void ParticleManager::generate_particles(int number) {
 }
 
 void ParticleManager::update() {
-    this->grid_search();
-//
-    //for (auto i = this->grid.begin(); i != this->grid.end(); i++) {
-//
-    //    for (Particle* j = &(*i)[0]; j != &(*i)[i->size()]; j++) {
-    //        for (Particle* k = &(*i)[0]; k != &(*i)[i->size()]; k++) {
-    //            if (j != k) j->checkCollitionWithParticle(*k);
-    //        }
-    //        j->update();
-    //        this->window->draw(j->circle);
-    //    }
-    //}
 
-    //for (auto it = this->particles.begin(); it != this->particles.end(); it++) {
-    //    for(auto it2 = this->particles.begin(); it2 != this->particles.end(); it2++)
-    //        if(it!=it2) it->checkCollitionWithParticle(*it2);
-    //    it->update();
-    //    this->window->draw(it->circle);
-    //}
+    this->window->setTitle("Particles: " + std::to_string(this->particles.size()));
+
+    this->grid_search();
+    for (int i=0; i<this->grid.size(); i++) {
+        for (int j=0; j<this->grid[i].size(); j++) {
+
+            auto cell = this->grid[i][j];
+
+            for (int dx = -1; dx<= 1; dx++) {
+                for (int dy = -1; dy<= 1; dy++) {
+
+                    if (i+dx < 0 || i+dx >= this->grid.size() || j+dy < 0 || j+dy >= this->grid[i].size()) continue;
+
+                    auto neighbour = this->grid[i+dx][j+dy];
+                    
+                    for (auto it = cell.begin(); it != cell.end(); it++) {
+                        for (auto it2 = neighbour.begin(); it2 != neighbour.end(); it2++) {
+                            if (it != it2) {
+                                it->checkCollitionWithParticle(*it2);
+                                it->update();
+                            } 
+                        }
+                        this->window->draw(it->circle);
+                    }
+                }
+            
+            }
+        }
+    }
 }

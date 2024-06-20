@@ -4,7 +4,6 @@
 #include <vector>
 #include <cmath>
 #include <time.h>
-#include <iostream>
 #include <SFML/Graphics.hpp>
 
 #include "dot.h"
