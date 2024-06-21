@@ -11,10 +11,9 @@ int main(int argc, char** argv) {
     window.setFramerateLimit(FRAMES_PER_SECOND);
 
     ParticleManager particleManager(&window, true, true);
+    particleManager.generate_particles(500);
 
     while (window.isOpen()) {
-
-        particleManager.generate_particles(1);
 
         sf::Event e;
         while (window.pollEvent(e)) {

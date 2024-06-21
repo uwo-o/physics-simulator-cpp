@@ -8,7 +8,7 @@
 #include "particle.h"
 
 
-static const int MAX_RADIUS = 5;
+static const int MAX_RADIUS = 15;
 
 class ParticleManager {
     private:

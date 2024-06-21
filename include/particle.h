@@ -26,7 +26,7 @@ public:
     void update();
     void checkCollitionWithWindows();
     void checkCollitionWithParticle(Particle &p);
-    //void manageOverlap(Particle &p);
+    void manageOverlap(Particle &p);
 
     void set_friction(bool state);
 };
