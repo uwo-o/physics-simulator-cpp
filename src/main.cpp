@@ -10,10 +10,11 @@ int main(int argc, char** argv) {
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Physim");
     window.setFramerateLimit(FRAMES_PER_SECOND);
 
-    WaveManager waveManager = WaveManager(&window);
-    waveManager.generate_grid();
+    ParticleManager particleManager(&window, true, true);
 
     while (window.isOpen()) {
+
+        particleManager.generate_particles(1);
 
         sf::Event e;
         while (window.pollEvent(e)) {
@@ -21,7 +22,7 @@ int main(int argc, char** argv) {
         }
 
         window.clear(sf::Color::Black);
-        waveManager.update();
+        particleManager.update();
         window.display();
 
     }

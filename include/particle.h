@@ -7,6 +7,8 @@
 #include "constants.h"
 #include "vector_op.h"
 
+#include <iostream>
+
 class Particle{
 public:
     Particle(sf::Vector2f position, float radius, sf::Color color);
@@ -24,6 +26,7 @@ public:
     void update();
     void checkCollitionWithWindows();
     void checkCollitionWithParticle(Particle &p);
+    void manageOverlap(Particle &p);
 
     void set_friction(bool state);
 };
