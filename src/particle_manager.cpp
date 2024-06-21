@@ -34,7 +34,7 @@ void ParticleManager::generate_particles(int number) {
     for (int i=0; i<number; i++) {
         Particle p(sf::Vector2f(0, WINDOW_HEIGHT/2), (float) MAX_RADIUS, sf::Color::White);
         p.velocity = sf::Vector2f((float)(rand() % 5 +1), (float)(rand() % 5 +1));
-        p.position = sf::Vector2f((float)(rand() % WINDOW_WIDTH), (float)(rand() % WINDOW_HEIGHT));
+        p.position = sf::Vector2f(0, 0);
         if (gravity) p.acceleration = sf::Vector2f(0, GRAVITY);
         if (friction) p.friction = this->friction;
         this->particles.push_back(p);
@@ -69,8 +69,6 @@ void ParticleManager::update() {
                             if (it != it2) {
                                 it->checkCollitionWithParticle(*it2);
                                 it->manageOverlap(*it2);
-                                it->update();
-                                it2->update();
                             }
                         }
                     }
@@ -79,12 +77,9 @@ void ParticleManager::update() {
         }
     }
 
-    for(auto row: *this->grid) {
-        for(auto cell: *row) {
-            for(auto& p: *cell) {
-                this->window->draw(p->circle);
-            }
-        }
+    for (Particle &it : this->particles) {
+        it.update();
+        this->window->draw(it.circle);
     }
 
 }
