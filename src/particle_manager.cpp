@@ -7,21 +7,25 @@ ParticleManager::ParticleManager(sf::RenderWindow *window, bool gravity, bool fr
 }
 
 void ParticleManager::grid_search() {
-    this->grid.clear();
-
-    this->grid = std::vector<std::vector<std::vector<Particle>>>();
+    this->grid->clear();
+    this->grid = new std::vector<std::vector<std::vector<Particle*>*>*>();
     for (int i=0; i<WINDOW_WIDTH; i+=MAX_RADIUS) {
-        this->grid.push_back(std::vector<std::vector<Particle>>());
+        this->grid->push_back(new std::vector<std::vector<Particle*>*>());
         for (int j=0; j<WINDOW_HEIGHT; j+=MAX_RADIUS) {
-            this->grid[i/MAX_RADIUS].push_back(std::vector<Particle>());
+            this->grid->at(i/MAX_RADIUS)->push_back(new std::vector<Particle*>());
         }
     }
     
-    for(auto& it : this->particles) {
+    for(Particle &it : this->particles){
         int x = it.position.x / MAX_RADIUS;
         int y = it.position.y / MAX_RADIUS;
 
-        this->grid[x][y].push_back(it);
+        if (x < 0) x = 0;
+        if (x >= WINDOW_WIDTH/MAX_RADIUS) x = WINDOW_WIDTH/MAX_RADIUS - 1;
+        if (y < 0) y = 0;
+        if (y >= WINDOW_HEIGHT/MAX_RADIUS) y = WINDOW_HEIGHT/MAX_RADIUS - 1;
+
+        this->grid->at(x)->at(y)->push_back(&it);
         it.update();
     }
 }
@@ -44,26 +48,29 @@ void ParticleManager::update() {
 
     this->grid_search();
 
-    for (int i=0; i<this->grid.size(); i++) {
-        for (int j=0; j<this->grid[i].size(); j++) {
+    //std::cout << "Iteration" << std::endl;
 
-            auto &cell = this->grid[i][j];
+    for (int i=0; i<this->grid->size(); i++) {
+        for (int j=0; j<this->grid->at(i)->size(); j++) {
 
-            if (cell.size() == 0) continue;
+            std::vector<Particle*> * cell = this->grid->at(i)->at(j);
+
+            if (cell->size() == 0) continue;
 
             for (int dx = -1; dx<= 1; dx++) {
                 for (int dy = -1; dy<= 1; dy++) {
 
-                    if (i+dx < 0 || i+dx >= this->grid.size() || j+dy < 0 || j+dy >= this->grid[i].size()) continue;
+                    if (i+dx < 0 || i+dx >= this->grid->size() || j+dy < 0 || j+dy >= this->grid->at(i)->size()) continue;
 
-                    auto &neighbour = this->grid[i+dx][j+dy];
+                    auto &neighbour = this->grid->at(i+dx)->at(j+dy);
                     
-                    for (auto &it : cell) {
-                        for (auto &it2 : neighbour) {
-                            if (&it != &it2) {
-                                it.checkCollitionWithParticle(it2);
-                                it.update();
-                                it2.update();
+                    for (Particle *it : *cell) {
+                        for (Particle *it2 : *neighbour) {
+                            if (it != it2) {
+                                it->checkCollitionWithParticle(*it2);
+                                //it->manageOverlap(*it2);
+                                it->update();
+                                it2->update();
                             }
                         }
                     }
@@ -72,10 +79,10 @@ void ParticleManager::update() {
         }
     }
 
-    for(auto& row: this->grid) {
-        for(auto& cell: row) {
-            for(auto& p: cell) {
-                this->window->draw(p.circle);
+    for(auto row: *this->grid) {
+        for(auto cell: *row) {
+            for(auto& p: *cell) {
+                this->window->draw(p->circle);
             }
         }
     }

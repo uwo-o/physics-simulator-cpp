@@ -63,6 +63,19 @@ void Particle::checkCollitionWithParticle(Particle &p) {
     p.velocity += (v2_f - v2_n) * normal;
 }
 
+//void Particle::manageOverlap(Particle &p) {
+//    float distance = sqrt(pow(p.position.x - this->position.x, 2) + pow(p.position.y - this->position.y, 2));
+//    if (distance > this->radius + p.radius) return;
+//
+//    sf::Vector2f normal = p.position - this->position;
+//    float mag = magnitude(normal);
+//    normal = normal / mag;
+//
+//    float overlap = (this->radius + p.radius) - distance;
+//    this->position -= overlap * normal;
+//    p.position += overlap * normal;
+//}
+
 void Particle::update() {
     this->velocity += this->acceleration;
     this->position += this->velocity;

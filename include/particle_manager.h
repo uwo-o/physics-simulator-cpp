@@ -14,7 +14,7 @@ class ParticleManager {
     private:
         sf::RenderWindow *window;
         std::list<Particle> particles;
-        std::vector<std::vector<std::vector<Particle>>> grid;
+        std::vector<std::vector<std::vector<Particle*>*>*> * grid;
         bool gravity;
         bool friction;
 
