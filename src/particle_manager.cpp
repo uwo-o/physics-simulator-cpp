@@ -33,7 +33,7 @@ void ParticleManager::grid_search() {
 void ParticleManager::generate_particles(int number) {
     for (int i=0; i<number; i++) {
         Particle p(sf::Vector2f(0, WINDOW_HEIGHT/2), (float) MAX_RADIUS, sf::Color::White);
-        p.velocity = sf::Vector2f(1, 0);
+        p.velocity = sf::Vector2f(5, (float) (rand() % 5 + 1));
         if (gravity) p.acceleration = sf::Vector2f(0, GRAVITY);
         if (friction) p.friction = this->friction;
         this->particles.push_back(p);
