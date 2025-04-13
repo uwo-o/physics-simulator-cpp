@@ -9,7 +9,8 @@
 
 #include <iostream>
 
-class Particle{
+class Particle
+{
 public:
     Particle(sf::Vector2f position, float radius, sf::Color color);
 
@@ -18,17 +19,20 @@ public:
     sf::Vector2f velocity;
     sf::Vector2f acceleration;
     sf::Vector2f momentum;
-    
+
+    void (*interaction)(Particle &p1, Particle &p2) = nullptr;
+
     float radius;
     float mass;
+    float charge;
+
     bool friction = false;
 
     void update();
     void checkCollitionWithWindows();
     void checkCollitionWithParticle(Particle &p);
     void manageOverlap(Particle &p);
-
-    void set_friction(bool state);
+    void interact(Particle &p);
 };
 
 #endif
